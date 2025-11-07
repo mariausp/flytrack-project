@@ -1,0 +1,178 @@
+{% load static %}
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fly Track — Cadastre-se</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#e8f2fb; --bg2:#cfe6fb; --card:#ffffff; --ink:#0b1e45; --muted:#3a5674;
+      --line:#e5eef6; --cta:#ff5a00; --cta-ink:#ffffff; --accent:#2f80ed;
+      --shadow:0 10px 30px rgba(17,38,71,.12);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; color:var(--ink);
+      background: radial-gradient(1200px 600px at 20% -10%, var(--bg2), transparent),
+                  linear-gradient(180deg, #eef6ff 0%, #dfeefe 100%);
+      display:grid; place-items:center; padding:24px;
+    }
+
+    .app{
+      width:min(1100px, 100%); background:var(--card); border-radius:28px; box-shadow:var(--shadow);
+      overflow:hidden; display:grid; grid-template-columns:1.05fr 1fr; gap:0; transform:scale(0.9); transform-origin:center;
+    }
+    @media (max-width:960px){ .app{ grid-template-columns:1fr; transform:scale(1) } .left{ display:none } }
+
+    /* Lado esquerdo (avião) */
+    .left{
+      position:relative; background:linear-gradient(180deg,#f5fafe 0%, #eaf3fd 100%);
+      padding:32px 32px 0; display:flex; flex-direction:column; justify-content:space-between; min-height:520px;
+    }
+    .brand{ display:flex; align-items:center; gap:10px; font-weight:800; font-size:22px; letter-spacing:.2px; color:#12325f; }
+    .brand-badge{ width:32px; height:32px; border-radius:999px; display:grid; place-items:center;
+      background:linear-gradient(135deg,#2f80ed 0%, #66a6ff 100%); color:#fff; font-weight:900; box-shadow:0 6px 18px rgba(47,128,237,.35); }
+    .plane-wrap{ position:relative; margin-top:20px; display:flex; align-items:flex-end; justify-content:center; height:100%; }
+    .plane{ width:min(560px,95%); height:auto; display:block; filter:drop-shadow(0 18px 28px rgba(20,44,86,.18));
+      user-select:none; pointer-events:none; transform:translate(-10px,-100px); transform-origin:center left; }
+    .footer-links{ display:flex; gap:24px; padding:14px 6px 22px; color:#3e5a79; font-size:14px; }
+    .footer-links a{ color:#3e5a79; text-decoration:none } .footer-links a:hover{ text-decoration:underline }
+
+    /* Lado direito (form) */
+    .right{ display:flex; align-items:center; justify-content:center; padding:28px; }
+    .card{ width:min(520px,100%); background:#fff; border-radius:24px; box-shadow:var(--shadow); padding:32px; }
+    h1{ margin:0 0 6px; font-size:32px; line-height:1.2 } .sub{ color:var(--muted); margin:0 0 22px; font-size:15.5px }
+    label{ display:block; font-weight:600; margin:12px 0 6px }
+    .input{ width:100%; border:1.5px solid var(--line); background:#fff; padding:12px 14px; border-radius:12px; font-size:15.5px; outline:none; transition:.15s border; }
+    .input:focus{ border-color:#c7dbf3; box-shadow:0 0 0 3px #e7f1ff }
+    .errors{ color:#b00020; margin:6px 0 0; font-size:14px; }
+
+    /* Grid 2 colunas no desktop */
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px 16px;
+    }
+    .col-2{ grid-column: 1 / -1; } /* ocupa duas colunas */
+    @media (max-width: 720px){
+      .grid{ grid-template-columns: 1fr; }
+      .col-2{ grid-column: auto; }
+    }
+
+    .btn{ width:100%; border:0; border-radius:12px; cursor:pointer; padding:14px 16px; font-weight:700; font-size:16px; margin-top:12px; transition:transform .04s, filter .15s, box-shadow .15s; }
+    .btn-cta{ background:linear-gradient(180deg, #ff6a21 0%, var(--cta) 100%); color:var(--cta-ink); box-shadow:0 10px 18px rgba(255,90,0,.25); }
+    .btn-cta:active{ transform:translateY(1px) }
+    .signup{ margin-top:14px; font-size:15px; text-align:center }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <!-- Lado esquerdo -->
+    <aside class="left" aria-hidden="true">
+      <div class="brand">
+        <div class="brand-badge">✈︎</div>
+        Fly Track
+      </div>
+      <div class="plane-wrap">
+        <img src="{% static 'core/img/aviao2.png' %}" alt="" class="plane" />
+      </div>
+      <div class="footer-links">
+        <a href="#">Política de Privacidade</a>
+        <a href="#">Termos</a>
+      </div>
+    </aside>
+
+    <!-- Lado direito: formulário -->
+    <section class="right">
+      <form class="card" action="{% url 'signup' %}" method="post" novalidate>
+        {% csrf_token %}
+        <h1>Crie sua conta</h1>
+        <p class="sub">Leva menos de 1 minuto</p>
+
+        {% if form.non_field_errors %}
+          <div class="errors">
+            {% for e in form.non_field_errors %}<div>{{ e }}</div>{% endfor %}
+          </div>
+        {% endif %}
+
+        <div class="grid">
+          <!-- Usuário (2 colunas) -->
+          <div class="col-2">
+            <label for="id_username">Usuário</label>
+            <input id="id_username" name="username" type="text" class="input"
+                   value="{{ form.username.value|default_if_none:'' }}" required>
+            {% if form.username.errors %}
+              <div class="errors">{% for e in form.username.errors %}<div>{{ e }}</div>{% endfor %}</div>
+            {% endif %}
+          </div>
+
+          <!-- E-mail (2 colunas) -->
+          <div class="col-2">
+            <label for="id_email">E-mail</label>
+            <input id="id_email" name="email" type="email" class="input"
+                   value="{{ form.email.value|default_if_none:'' }}" required>
+            {% if form.email.errors %}
+              <div class="errors">{% for e in form.email.errors %}<div>{{ e }}</div>{% endfor %}</div>
+            {% endif %}
+          </div>
+
+          <!-- Data de nascimento (coluna 1) -->
+          <div>
+            <label for="id_birth_date">Data de nascimento</label>
+            <input id="id_birth_date" name="birth_date" type="date" class="input"
+                   value="{{ form.birth_date.value|default_if_none:'' }}" required>
+            {% if form.birth_date.errors %}
+              <div class="errors">{% for e in form.birth_date.errors %}<div>{{ e }}</div>{% endfor %}</div>
+            {% endif %}
+          </div>
+
+          <!-- CPF (coluna 2) -->
+          <div>
+            <label for="id_cpf">CPF</label>
+            <input id="id_cpf" name="cpf" class="input" inputmode="numeric" placeholder="Somente números"
+                   value="{{ form.cpf.value|default_if_none:'' }}" required>
+            {% if form.cpf.errors %}
+              <div class="errors">{% for e in form.cpf.errors %}<div>{{ e }}</div>{% endfor %}</div>
+            {% endif %}
+          </div>
+
+          <!-- Senha (coluna 1) -->
+          <div>
+            <label for="id_password1">Senha</label>
+            <input id="id_password1" name="password1" type="password" class="input" required>
+            {% if form.password1.errors %}
+              <div class="errors">{% for e in form.password1.errors %}<div>{{ e }}</div>{% endfor %}</div>
+            {% endif %}
+          </div>
+
+          <!-- Confirmar senha (coluna 2) -->
+          <div>
+            <label for="id_password2">Confirmar senha</label>
+            <input id="id_password2" name="password2" type="password" class="input" required>
+            {% if form.password2.errors %}
+              <div class="errors">{% for e in form.password2.errors %}<div>{{ e }}</div>{% endfor %}</div>
+            {% endif %}
+          </div>
+
+          <!-- Botão (2 colunas) -->
+          <div class="col-2">
+            <button class="btn btn-cta" type="submit">Cadastrar</button>
+          </div>
+
+          <div class="col-2 signup">
+            Já tem conta?
+            <a class="link" href="{% url 'login' %}">Entrar</a>
+          </div>
+        </div>
+      </form>
+    </section>
+  </main>
+</body>
+</html>

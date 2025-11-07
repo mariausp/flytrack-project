@@ -1,0 +1,35 @@
+﻿# --- Python/Django ---
+__pycache__/
+*.py[cod]
+*.log
+
+# Banco local (não subir)
+*.sqlite3
+db.sqlite3
+
+# Coleta de estáticos e uploads
+staticfiles/
+media/
+
+# --- Virtualenv ---
+.venv/
+venv/
+
+# --- IDE/SO ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# --- Credenciais/segredos ---
+.env
+*.env
+.env.*    # ex.: .env.dev, .env.prod
+
+# --- Testes/coverage (se usar) ---
+.pytest_cache/
+.coverage
+coverage.xml
+
+# --- Front-end (se existir) ---
+node_modules/
