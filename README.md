@@ -1,10 +1,19 @@
-﻿# FlyTrack
+# ✈️ FlyTrack
 
-## Como rodar
-py -m venv .venv
-.\.venv\Scripts\Activate.ps1
-py -m pip install -r requirements.txt
-py manage.py migrate
-py manage.py runserver
+**FlyTrack** é uma aplicação web desenvolvida em **Django** para busca, histórico e acompanhamento de passagens aéreas.  
+O projeto foi criado com foco em **design moderno**, **acessibilidade** e **organização modular** (app principal: `core`).
 
-Acesse http://127.0.0.1:8000/
+---
+
+## 🧭 Funcionalidades
+
+- 🌍 Página inicial com busca e destaques  
+- 📊 Página de **Resultados** com interface dinâmica  
+- 🕓 Página de **Histórico de viagens** (passagens passadas e pendentes)  
+- 💬 Página de **Contato** com envio de e-mail  
+- 🔐 Sistema de autenticação com login/cadastro (em breve: “Entrar com Google”)
+
+---
+
+## 🏗️ Estrutura do Projeto
+
